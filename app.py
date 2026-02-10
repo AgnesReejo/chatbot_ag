@@ -2,13 +2,18 @@ import streamlit as st
 from groq import Groq
 import os
 
+st.title("🤖 Chatbot")
+
 # ---- CONFIG ----
-import os
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-client = Groq(api_key=GROQ_API_KEY)
+# 🚨 Critical fix: stop early if key is missing
+if not GROQ_API_KEY:
+    st.warning("GROQ_API_KEY not found. Please set it in Streamlit Secrets.")
+    st.stop()
 
-st.title("🤖 Chatbot")
+# Create client ONLY after key exists
+client = Groq(api_key=GROQ_API_KEY)
 
 # ---- MEMORY ----
 if "messages" not in st.session_state:
